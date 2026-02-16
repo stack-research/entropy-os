@@ -1,0 +1,22 @@
+[project]
+name = "entropy-os"
+version = "0.1.0"
+description = "Software that expires"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+entropy = "entropyos.cli:main"
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["entropyos*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-q"
