@@ -19,3 +19,5 @@ Icon?
 .VolumeIcon.icns
 .apdisk
 ._*
+
+*.egg-info/
