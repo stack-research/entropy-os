@@ -9,6 +9,12 @@ from typing import Any, Mapping, MutableMapping
 ID_PATTERN = re.compile(r"^(api|fn|state):[A-Za-z0-9._:/#-]+$")
 STATE_KEY_PATTERN = re.compile(r"^[A-Za-z0-9._:/#-]+$")
 
+# Lifecycle states
+LIFECYCLE_ACTIVE = "active"
+LIFECYCLE_EXPIRED = "expired"
+LIFECYCLE_PRUNABLE = "prunable"
+LIFECYCLE_PRUNED = "pruned"
+
 
 class IdentityError(ValueError):
     """Raised when an identity violates the contract."""

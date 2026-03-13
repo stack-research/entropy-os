@@ -4,14 +4,14 @@ from entropyos.runtime import EntropyRuntime
 def replay() -> dict:
     runtime = EntropyRuntime()
 
-    @runtime.apis.ephemeral_api(ttl_ticks=2)
+    @runtime.apis.ephemeral_api("api:test/sample", ttl_ticks=2)
     def sample() -> dict[str, str]:
         return {"ok": "yes"}
 
-    runtime.decay.register("cold", ttl_ticks=3)
+    runtime.decay.register("fn:test/cold", ttl_ticks=3)
     runtime.store.set("k", 1, ttl_ticks=2)
     runtime.tick(1)
-    runtime.decay.touch("cold")
+    runtime.decay.touch("fn:test/cold")
     runtime.tick(2)
     return runtime.status()
 
@@ -23,11 +23,11 @@ def test_tick_replay_is_deterministic() -> None:
 def test_entropy_score_model() -> None:
     runtime = EntropyRuntime()
 
-    @runtime.apis.ephemeral_api(ttl_ticks=1)
+    @runtime.apis.ephemeral_api("api:test/sample", ttl_ticks=1)
     def sample() -> dict[str, str]:
         return {"ok": "yes"}
 
-    runtime.decay.register("cold", ttl_ticks=1)
+    runtime.decay.register("fn:test/cold", ttl_ticks=1)
     runtime.store.set("k", 1, ttl_ticks=4)
     runtime.tick(1)
 
@@ -40,14 +40,14 @@ def test_entropy_score_model() -> None:
 def test_state_has_no_machine_specific_paths() -> None:
     runtime = EntropyRuntime()
 
-    @runtime.apis.ephemeral_api(ttl_ticks=5)
+    @runtime.apis.ephemeral_api("api:test/sample", ttl_ticks=5)
     def sample() -> dict[str, str]:
         return {"ok": "yes"}
 
-    runtime.decay.register("cold", ttl_ticks=5)
+    runtime.decay.register("fn:test/cold", ttl_ticks=5)
     status = runtime.status()
-    api_entry = status["apis"]["sample"]
-    decay_entry = status["decay"]["cold"]
+    api_entry = status["apis"]["api:test/sample"]
+    decay_entry = status["decay"]["fn:test/cold"]
 
     assert "source_path" not in api_entry
     assert "source_line" not in api_entry
